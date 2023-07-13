@@ -28,6 +28,7 @@ namespace ReStore.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+						services.AddCors();
 						services.AddDbContext<StoreContext>(options => {
 							options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
 						});
@@ -48,8 +49,11 @@ namespace ReStore.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ReStore.Api v1"));
             }
+						app.UseCors(options => {
+							options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+						});
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
